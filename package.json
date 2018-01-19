@@ -1,0 +1,24 @@
+{
+  "name": "diary",
+  "version": "1.0.0",
+  "description": "reac training",
+  "main": "index.js",
+  "dependencies": {
+    "babel-loader": "^7.1.2",
+    "react": "^16.2.0",
+    "react-simple-boilerplate": "^1.0.1",
+    "webpack": "^3.10.0"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^2.11.0"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://tommirok@bitbucket.org/tommirok/diary.git"
+  },
+  "author": "Tommi Rokolampi",
+  "license": "ISC"
+}
