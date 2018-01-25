@@ -1,0 +1,131 @@
+body,textarea, input, u {
+  color: rgb(103, 154, 128) ;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+body{
+  position: relative;
+  background: rgb(0, 0, 0) ;
+  background-repeat: repeat-y ;
+  z-index: 0;
+
+}
+body::after{
+  content: ' ';
+  z-index: -1;
+  position: fixed ;
+  background-image:url("https://i.ytimg.com/vi/0_jNjpVxUt0/maxresdefault.jpg");
+  background-repeat: repeat-y ;
+  background-attachment: scroll ;
+  opacity:0.4;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+main{
+
+  display: grid;
+  width: 100%;
+  height: 100vh;
+  text-align: center;
+  /*grid roles*/
+  grid-template-rows: 10vh auto auto 5vh;
+  grid-template-columns: 1fr 3fr 3fr 1fr;
+  grid-template-areas:
+    "appisleft header header appisright"
+    "appisleft navbar navbar appisrigth"
+    "appisleft appis appis appisrigth"
+    "footer footer footer footer";
+}
+
+textarea, input{
+  border: solid 3px rgb(52, 130, 154) ;
+  opacity: 0.7;
+  width:97%;
+  height:auto;
+  font-size: 2vh;
+  resize: none;
+
+}
+textarea{
+  height: 20vh;
+
+}
+header{
+  grid-area: header;
+}
+h1{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+
+}
+nav{
+  grid-area: navbar;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: nowrap;
+  background-color: rgba(14, 62, 77, 0.77);
+  height: 3vh;
+  color: white;
+}
+a{
+  color: white;
+}
+app{
+  grid-area: appis ;
+  margin-top: 200px;
+}
+
+footer{
+
+  grid-area: footer ;
+  border: solid 3px black;
+  height: 5vh;
+}
+img{
+  margin: 10%;
+}
+article{
+  padding: 10px;
+  text-indent: 1px;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.7);
+  border: solid 3px rgb(52, 130, 154) ;
+
+}
+.button{
+  background-color: black;
+  padding: 10px;
+  border-radius: 30px;
+  cursor: pointer ;
+}
+
+@media screen and (max-width: 480px) {
+    main {
+
+
+      grid-template-rows: 100px 60px auto 100px;
+      grid-template-columns: 0.5fr auto 0.5fr;
+      grid-template-areas:
+      "appisleft header appisright"
+      "appisleft navbar appisright"
+      "appisleft appis appisright"
+      "appisleft footer appisright"
+
+    }
+}
+@media screen and (min-width: 800px) {
+    main {
+
+
+      grid-template-rows: 10vh auto auto 100px;
+      grid-template-columns: auto 300px 300px auto;
+
+
+    }
+}
