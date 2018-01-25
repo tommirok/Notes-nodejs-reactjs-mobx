@@ -1,5 +1,5 @@
 {
-<<<<<<< HEAD
+
   "name": "notes",
   "version": "0.0.0",
   "description": "mobx is the best!",
@@ -50,29 +50,5 @@
     "webpack": "^1.12.0",
     "webpack-dev-server": "^1.14.0",
     "webpack-merge": "^0.14.0"
-  }
-=======
-  "name": "diary",
-  "version": "1.0.0",
-  "description": "reac training",
-  "main": "index.js",
-  "dependencies": {
-    "babel-loader": "^7.1.2",
-    "react": "^16.2.0",
-    "react-simple-boilerplate": "^1.0.1",
-    "webpack": "^3.10.0"
-  },
-  "devDependencies": {
-    "webpack-dev-server": "^2.11.0"
-  },
-  "scripts": {
-    "test": "test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "http://tommirok@bitbucket.org/tommirok/diary.git"
-  },
-  "author": "Tommi Rokolampi",
-  "license": "ISC"
->>>>>>> c226ae59c4f946b1c7afd5f0fab67be61da68a9c
+    }
 }

@@ -9,6 +9,7 @@ import NotesList from './NotesList';
 class App extends React.Component {
   constructor(props) {
     super(props);
+
   }
   /*addNote = (noteInfo) =>{
     console.log(noteInfo);
@@ -17,11 +18,11 @@ class App extends React.Component {
     }))
   };*/
   render() {
-
+console.log(this.props);
     return (
       <app>
-      <FormNote onSubmit={this.addNote}/>
-        <NotesList  notes={this.props.noteStore.allnotes}/>
+      <FormNote store={this.props.noteStore} />
+        <NotesList store={this.props.noteStore}/>
       </app>
     );
   }

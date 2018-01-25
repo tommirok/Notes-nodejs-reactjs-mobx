@@ -1,44 +1,30 @@
 import React, { Component } from "react";
 
+
+
 export default class NoteForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      id: 1,
-      user:true,
-    };
+
   }
 
   handleSubmit = event => {
-    if (this.state.note && this.state.date) {
-      this.setState(prevState => ({
-        id: prevState.id + 1
-      }));
-
-      let data = this.state;
-      console.log(this.state);
-      event.preventDefault();
-      this.props.onSubmit(data);
-      event.target.reset();
-    } else {
-      alert("note or date is empty");
-    }
-  };
+    event.preventDefault();
+    this.props.store.addNote();
+    console.log(this.props.store);
+    event.target.reset();
+}
   dateChange = event => {
-    console.log(event.target.value);
-    this.setState({
-      date: event.target.value
-    });
-  };
+    this.props.store.setDate(event.target.value);
+};
   noteChange = event => {
-    this.setState({
-      note: event.target.value
-    });
+    this.props.store.setNoteText(event.target.value);
   };
 
   render() {
+    let user = true;
     let formOrNot;
-    switch (this.state.user) {
+    switch (user) {
       case true:
       formOrNot = (
         <form onSubmit={this.handleSubmit} id="userForm">

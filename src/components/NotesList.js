@@ -1,10 +1,12 @@
 
 import React, { Component } from 'react';
 import Note from "./Note";
+
 const NotesList = (props) =>{
-  console.log(props.notes);
+
+  console.log(props.store.allNotes);
     return <div>
-        <section>{props.notes.map(note => <Note key={note.id} {...note}/>)}</section>
+        <section>{props.store.allnotes.map(note => <Note key={note.id} {...note}/>)}</section>
       </div>
 
 }
