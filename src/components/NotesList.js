@@ -1,13 +1,20 @@
 
 import React, { Component } from 'react';
+import { observer, inject } from 'mobx-react';
 import Note from "./Note";
+@inject('noteStore')@observer
+export default class NotesList extends Component{
+  componentDidMount(){
+    this.props.noteStore.fetchNotes();
+  }
+  render(){
+    const notes  = this.props.noteStore.allNotes;
+    const comments = this.props.noteStore.comments;
+    const fetched = this.props.noteStore.fetched;
 
-const NotesList = (props) =>{
-
-  console.log(props.store.allNotes);
     return <div>
-        <section>{props.store.allnotes.map(note => <Note key={note.id} {...note}/>)}</section>
-      </div>
+        <section>{notes.reverse().map(note => <Note key={note["_id"]} date={note["date"]} note={note["note"]} comments={comments}/>)}</section>
 
+      </div>
+    }
 }
-export default NotesList;

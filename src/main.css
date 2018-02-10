@@ -8,7 +8,6 @@ body{
   background: rgb(0, 0, 0) ;
   background-repeat: repeat-y ;
   z-index: 0;
-
 }
 body::after{
   content: ' ';
@@ -45,9 +44,8 @@ textarea, input{
   opacity: 0.7;
   width:97%;
   height:auto;
-  font-size: 2vh;
+  font-size: 2.5vh;
   resize: none;
-
 }
 textarea{
   height: 20vh;
@@ -75,6 +73,7 @@ nav{
 }
 a{
   color: white;
+  cursor: pointer;
 }
 app{
   grid-area: appis ;
@@ -102,7 +101,17 @@ article{
   background-color: black;
   padding: 10px;
   border-radius: 30px;
+  width: 10em;
   cursor: pointer ;
+}
+
+.togglebutton{
+
+  cursor: pointer;
+  border: none;
+  text-decoration: underline;
+  background: none;
+
 }
 
 @media screen and (max-width: 480px) {

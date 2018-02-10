@@ -27,7 +27,6 @@ export default class NotesRoutes extends Component{
 						<Route exact path="/" component={App}/>
 						<Route path="login" component={Login}/>
 
-
 					</Switch>
 
 	        <Footer />

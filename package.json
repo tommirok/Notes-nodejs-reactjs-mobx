@@ -1,5 +1,4 @@
 {
-
   "name": "notes",
   "version": "0.0.0",
   "description": "mobx is the best!",
@@ -11,13 +10,21 @@
     "build-es6": "rimraf 'es6' && babel --presets react,stage-1 --plugins transform-decorators-legacy,transform-object-assign,array-includes src -d es6",
     "clean": "rimraf '*(es6|dist)'",
     "build": "webpack",
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "start-dev": "nf start -p 8080"
   },
-  "author": "",
+  "author": "Tommi Rokolampi",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.17.1",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "foreman": "^2.0.0",
+    "marked": "^0.3.12",
     "mobx": "^2.0.0",
     "mobx-react": "^3.0.0",
+    "mongoose": "^5.0.3",
+    "nodemon": "^1.14.12",
     "react": "^15.0.0",
     "react-dom": "^15.0.0",
     "react-router-dom": "^4.2.2"
@@ -33,7 +40,7 @@
     "babel-preset-react": "^6.0.0",
     "babel-preset-react-hmre": "^1.0.0",
     "babel-preset-stage-1": "^6.0.0",
-    "clean-webpack-plugin": "^0.1.0",
+    "clean-webpack-plugin": "^0.1.18",
     "css-loader": "^0.23.0",
     "eslint": "^3.1.0",
     "eslint-config-airbnb": "^9.0.0",
@@ -50,5 +57,5 @@
     "webpack": "^1.12.0",
     "webpack-dev-server": "^1.14.0",
     "webpack-merge": "^0.14.0"
-    }
+  }
 }

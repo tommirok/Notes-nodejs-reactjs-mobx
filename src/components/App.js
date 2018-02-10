@@ -4,13 +4,13 @@ import { observer, inject } from 'mobx-react';
 import MyComponent from './MyComponent';
 import FormNote from './FormNote';
 import NotesList from './NotesList';
-
+import Note from './Note';
 @inject('noteStore')@observer
 class App extends React.Component {
   constructor(props) {
     super(props);
-
   }
+
   /*addNote = (noteInfo) =>{
     console.log(noteInfo);
     this.setState(prevState=>({
@@ -18,11 +18,13 @@ class App extends React.Component {
     }))
   };*/
   render() {
-console.log(this.props);
+
     return (
+
       <app>
-      <FormNote store={this.props.noteStore} />
-        <NotesList store={this.props.noteStore}/>
+
+    <FormNote store={this.props.noteStore} />
+    <NotesList />
       </app>
     );
   }

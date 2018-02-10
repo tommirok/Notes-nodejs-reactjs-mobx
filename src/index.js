@@ -10,4 +10,5 @@ document.body.appendChild(root);
 const store = new Store();
 
 
-ReactDOM.render(<NotesRoutes store={store} />,document.querySelector('#app'));
+ReactDOM.render(<NotesRoutes store={store}
+url='http://localhost:3001/api/notes' pollInterval={5000} />,document.querySelector('#app'));

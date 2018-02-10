@@ -5,42 +5,30 @@ import React, { Component } from "react";
 export default class NoteForm extends Component {
   constructor(props) {
     super(props);
+    window.store = this.props.store;
+
 
   }
-
-  handleSubmit = event => {
-    event.preventDefault();
-    this.props.store.addNote();
-    console.log(this.props.store);
-    event.target.reset();
-}
-  dateChange = event => {
-    this.props.store.setDate(event.target.value);
-};
-  noteChange = event => {
-    this.props.store.setNoteText(event.target.value);
-  };
-
   render() {
     let user = true;
     let formOrNot;
     switch (user) {
       case true:
       formOrNot = (
-        <form onSubmit={this.handleSubmit} id="userForm">
+      <div>
           <label type="text" name="date" value="Date" disabled>
             Date
           </label>
-          <input type="Date" name="username" onChange={this.dateChange} />
+          <input type="Date" name="date" onChange={(e)=>{this.props.store.setDate(e)}} />
           <label type="text" name="date" value="Date" disabled>
             Note
           </label>
           <textarea
             name="comment"
             form="userForm"
-            onChange={this.noteChange}/>
-          <input className="button" type="submit" value="Add The Note" />
-        </form>
+            onChange={(e)=>{this.props.store.setNoteText(e)}}/>
+          <input onClick={(e)=>{this.props.store.addNote(e)}} className="button" type="submit" value="Add a Note" />
+      </div>
     )
         break;
         case false:
