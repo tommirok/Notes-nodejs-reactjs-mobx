@@ -1,13 +1,22 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import Comment from "./Comment"
-import FormComment from "./FormComment"
+import FormComment from "./FormComment";
+let iscomments;
 @inject('noteStore')@observer
 export default class Note extends Component{
+  constructor(props){
+    super(props)
+  }
   render(){
 let comments = this.props.noteStore.comments;
 const store = this.props.noteStore;
+const id = this.props.id
 
+  if((store.commentform) && (id == store.commentformId)){
+    iscomments = <FormComment id={this.props.id}/>
+  }else{
+    iscomments = null;
+  }
 
   return(
     <div >
@@ -15,12 +24,13 @@ const store = this.props.noteStore;
       <article>
         {this.props.note}
       </article>
-      <div>
-      {comments.reverse().map(comment => <Comment name={comment.name} comment={comment.comment}/>)}
-    </div>
-      <input type="submit" onClick={store.toggleCommentForm} defaultValue="Leave Comment" className="togglebutton"/>
+
+      <input type="submit"
+             onClick={this.props.onClick}
+             defaultValue="Leave Comment"
+             className="togglebutton"/>
       <br/>
-    {store.commentform ? <FormComment/> :  null}
+      {iscomments}
     </div>
   )
   }

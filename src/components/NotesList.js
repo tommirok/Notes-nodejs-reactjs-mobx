@@ -6,6 +6,8 @@ import Note from "./Note";
 export default class NotesList extends Component{
   componentDidMount(){
     this.props.noteStore.fetchNotes();
+    this.props.noteStore.fetchComments();
+
   }
   render(){
     const notes  = this.props.noteStore.allNotes;
@@ -13,7 +15,14 @@ export default class NotesList extends Component{
     const fetched = this.props.noteStore.fetched;
 
     return <div>
-        <section>{notes.reverse().map(note => <Note key={note["_id"]} date={note["date"]} note={note["note"]} comments={comments}/>)}</section>
+        <section>{notes.reverse().map(note =>
+          <Note key={note._id}
+                id={note._id}
+                date={note.date}
+                note={note.note}
+                comments={comments}
+                onClick={(id)=>{this.props.noteStore.toggleCommentForm(id)}}/>)}
+              </section>
 
       </div>
     }

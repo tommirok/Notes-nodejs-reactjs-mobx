@@ -27,7 +27,7 @@ export default class NoteForm extends Component {
             name="comment"
             form="userForm"
             onChange={(e)=>{this.props.store.setNoteText(e)}}/>
-          <input onClick={(e)=>{this.props.store.addNote(e)}} className="button" type="submit" value="Add a Note" />
+          <input onClick={()=>{this.props.store.addNote()}} className="button" type="submit" value="Add a Note" />
       </div>
     )
         break;

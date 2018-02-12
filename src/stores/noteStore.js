@@ -37,17 +37,20 @@ class NoteStore {
   @observable allnotes = [];
   @observable note = {};
   @observable date = "";
-  @observable id = 0;
+  @observable id = null;
   @observable noteText = "";
   @observable comments = [];
   @observable comment = "";
   @observable commentform = false;
+  @observable commentformId = null;
   @observable fetched = false;
-  @action
-  toggleCommentForm = () =>{
-    this.commentform ? this.commentform = false : this.commentform = true;
-  }
 
+  @action
+  toggleCommentForm = (id) =>{
+    this.commentformId = id;
+    this.commentform ? this.commentform = false : this.commentform = true;
+
+  }
   /**
    * checks if theres is any notes in the store
    * @return {[boolean]} [description]
@@ -64,7 +67,6 @@ class NoteStore {
   get commentForm(){
     return this.commentform;
   }
-
   /**
    * fetches all notes from REST
    * @return {[type]} [description]
@@ -76,10 +78,8 @@ class NoteStore {
     })
     .catch((err)=>{
       this.fetched = false;
-
     });
   }
-
   fetchComments =()=>{
     axios.get('http://localhost:3001/api/comments').then((res)=>{
       this.fetched = true;
@@ -87,17 +87,15 @@ class NoteStore {
     })
     .catch((err)=>{
       this.fetched = false;
-
     });
   }
-
   //noten lisäys alkaa
   @action
-  addNote = (event) => {
+  addNote = () => {
     let note = {};
     note.date = this.date;
     note.note = this.noteText;
-
+    //request
     axios.post('http://localhost:3001/api/notes', note)
     .then((res)=>{
       this.fetched = true;
@@ -116,16 +114,15 @@ class NoteStore {
   };
   @action
   setNoteText = event => {
-
     this.noteText = event.target.value;
   };
   //commentin lähetys alkaa
   @action
-  sendComment = (event) =>{
+  sendComment = () =>{
       let comment = {};
       comment.name = "supervice";
       comment.comment = this.comment;
-
+      //request
       axios.post('http://localhost:3001/api/comments', comment)
       .then((res)=>{
         this.fetched = true;
