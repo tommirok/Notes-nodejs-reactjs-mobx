@@ -1,37 +1,66 @@
-import React, { Component } from 'react';
-import { observer, inject } from 'mobx-react';
+import React, { Component } from "react";
+import { observer, inject } from "mobx-react";
+import { observable, action } from "mobx";
+import Comment from "./Comment";
 import FormComment from "./FormComment";
 let iscomments;
-@inject('noteStore')@observer
-export default class Note extends Component{
-  constructor(props){
-    super(props)
+@inject("noteStore")
+@observer
+export default class Note extends Component {
+  constructor(props) {
+    super(props);
   }
-  render(){
-let comments = this.props.noteStore.comments;
-const store = this.props.noteStore;
-const id = this.props.id
-
-  if((store.commentform) && (id == store.commentformId)){
-    iscomments = <FormComment id={this.props.id}/>
-  }else{
-    iscomments = null;
+  componentWillReceiveProps() {
+    "jouuu";
   }
+  @observable commentform = false;
+  toggleCommentForm = id => {
+    this.commentform ? (this.commentform = false) : (this.commentform = true);
+  };
 
-  return(
-    <div >
-      <h1>{this.props.date}</h1>
-      <article>
-        {this.props.note}
-      </article>
+  render() {
+    let comments = this.props.noteStore.comments;
+    const store = this.props.noteStore;
+    const fetched = store.fetchedc;
+    const id = this.props.id;
+    const filtered = store.comments.filter(comment => comment.noteId === id);
+    
+    if (this.commentform) {
+      iscomments = (
+        <div>
+          {filtered
+            .reverse()
+            .map(comment => (
+              <Comment
+                key={comment._id}
+                noteId={id}
+                name={comment.name}
+                comment={comment.comment}
+              />
+            ))}
+          <FormComment comments={comments} noteId={id} />
+        </div>
+      );
+    } else {
+      iscomments = null;
+    }
 
-      <input type="submit"
-             onClick={this.props.onClick}
-             defaultValue="Leave Comment"
-             className="togglebutton"/>
-      <br/>
-      {iscomments}
-    </div>
-  )
+    return (
+      <div>
+        <h1>{this.props.date}</h1>
+        <article>{this.props.note}</article>
+
+        <input
+          type="submit"
+          onClick={id => {
+            this.toggleCommentForm(id);
+          }}
+          defaultValue="Leave Comment"
+          className="togglebutton"
+        />
+        <br />
+        {iscomments}
+      </div>
+    );
   }
 }

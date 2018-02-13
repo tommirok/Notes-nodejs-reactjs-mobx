@@ -1,7 +1,7 @@
 import React, { Component } from "react";
+import { observer, inject } from 'mobx-react';
 
-
-
+@inject('noteStore')@observer
 export default class NoteForm extends Component {
   constructor(props) {
     super(props);
@@ -26,8 +26,9 @@ export default class NoteForm extends Component {
           <textarea
             name="comment"
             form="userForm"
+            value={this.props.store.temp}
             onChange={(e)=>{this.props.store.setNoteText(e)}}/>
-          <input onClick={()=>{this.props.store.addNote()}} className="button" type="submit" value="Add a Note" />
+          <input onClick={(e)=>{this.props.store.addNote(e)}} className="button" type="submit" value="Add a Note" />
       </div>
     )
         break;

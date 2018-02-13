@@ -6,12 +6,13 @@ import Note from "./Note";
 export default class NotesList extends Component{
   componentDidMount(){
     this.props.noteStore.fetchNotes();
-    this.props.noteStore.fetchComments();
+      this.props.noteStore.fetchComments();
+      console.log("didmount");
 
   }
   render(){
     const notes  = this.props.noteStore.allNotes;
-    const comments = this.props.noteStore.comments;
+
     const fetched = this.props.noteStore.fetched;
 
     return <div>
@@ -20,8 +21,7 @@ export default class NotesList extends Component{
                 id={note._id}
                 date={note.date}
                 note={note.note}
-                comments={comments}
-                onClick={(id)=>{this.props.noteStore.toggleCommentForm(id)}}/>)}
+                />)}
               </section>
 
       </div>

@@ -1,5 +1,5 @@
 import { observable, action, computed } from "mobx";
-const axios = require('axios');
+const axios = require("axios");
 const TestNotes = [
   {
     id: 58,
@@ -37,26 +37,21 @@ class NoteStore {
   @observable allnotes = [];
   @observable note = {};
   @observable date = "";
-  @observable id = null;
+  @observable noteId = "";
   @observable noteText = "";
   @observable comments = [];
   @observable comment = "";
-  @observable commentform = false;
+  @observable temp;
+  @observable reset;
   @observable commentformId = null;
   @observable fetched = false;
 
-  @action
-  toggleCommentForm = (id) =>{
-    this.commentformId = id;
-    this.commentform ? this.commentform = false : this.commentform = true;
-
-  }
   /**
    * checks if theres is any notes in the store
    * @return {[boolean]} [description]
    */
   @computed
-  get anyNotes(){
+  get anyNotes() {
     return this.allnotes.length !== 0;
   }
   @computed
@@ -64,50 +59,61 @@ class NoteStore {
     return this.allnotes;
   }
   @computed
-  get commentForm(){
+  get commentForm() {
     return this.commentform;
   }
   /**
    * fetches all notes from REST
    * @return {[type]} [description]
    */
-  fetchNotes =()=>{
-    axios.get('http://localhost:3001/api/notes').then((res)=>{
-      this.fetched = true;
-      this.allnotes = res.data
-    })
-    .catch((err)=>{
-      this.fetched = false;
-    });
-  }
-  fetchComments =()=>{
-    axios.get('http://localhost:3001/api/comments').then((res)=>{
-      this.fetched = true;
-      this.comments = res.data
-    })
-    .catch((err)=>{
-      this.fetched = false;
-    });
-  }
+  fetchNotes = () => {
+    axios
+      .get("http://localhost:3001/api/notes")
+      .then(res => {
+        this.fetched = true;
+        this.allnotes = res.data;
+      })
+      .catch(err => {
+        this.fetched = false;
+      });
+  };
+  fetchComments = () => {
+    axios
+      .get("http://localhost:3001/api/comments")
+      .then(res => {
+        this.fetchedc = true;
+        this.comments = res.data;
+        console.log(res.data);
+      })
+      .catch(err => {
+        this.fetchedc = false;
+      });
+  };
   //noten lisäys alkaa
   @action
-  addNote = () => {
+  addNote = _this => {
+    this.temp = "";
+
     let note = {};
     note.date = this.date;
     note.note = this.noteText;
+    console.log(_this);
     //request
-    axios.post('http://localhost:3001/api/notes', note)
-    .then((res)=>{
-      this.fetched = true;
-      console.log('OK hyvä');
-    })
-    .catch((err) => {
-      this.fetched = false;
-      console.log('ei meläpi');
-    });
-  this.fetchNotes();
+    axios
+      .post("http://localhost:3001/api/notes", note)
+      .then(res => {
+        this.fetched = true;
+
+        console.log("OK hyvä");
+        this.temp = this.reset;
+        this.fetchNotes();
+      })
+      .catch(err => {
+        this.fetched = false;
+        console.log("ei meläpi");
+      });
   };
-//lopppuuu
+  //lopppuuu
   @action
   setDate = event => {
     this.date = event.target.value;
@@ -118,29 +124,32 @@ class NoteStore {
   };
   //commentin lähetys alkaa
   @action
-  sendComment = () =>{
-      let comment = {};
-      comment.name = "supervice";
-      comment.comment = this.comment;
-      //request
-      axios.post('http://localhost:3001/api/comments', comment)
-      .then((res)=>{
-        this.fetched = true;
-        console.log('OK hyvä');
+  sendComment = e => {
+    this.temp = "";
+    let comment = {};
+    comment.noteId = e.target.name;
+    comment.name = "supervice";
+    comment.comment = this.comment;
+    //request
+    axios
+      .post("http://localhost:3001/api/comments", comment)
+      .then(res => {
+        this.fetchedc = true;
+        this.temp = this.reset;
+        console.log("OK hyvä");
+        this.fetchComments();
       })
-      .catch((err) => {
-        this.fetched = false;
-        console.log('ei meläpi');
+      .catch(err => {
+        this.fetchedc = false;
+        console.log("ei meläpi");
       });
-    this.fetchComments();
-    };
+  };
 
   //loppuuu
   @action
-  setComment = (event) =>{
-    console.log(event.target.value);
+  setComment = event => {
     this.comment = event.target.value;
-  }
+  };
 }
 const noteStore = new NoteStore();
 //the store
