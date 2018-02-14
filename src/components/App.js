@@ -1,30 +1,22 @@
-
-import React from 'react';
-import { observer, inject } from 'mobx-react';
-import MyComponent from './MyComponent';
-import FormNote from './FormNote';
-import NotesList from './NotesList';
-import Note from './Note';
-@inject('noteStore')@observer
+import React from "react";
+import { observer, inject } from "mobx-react";
+import MyComponent from "./MyComponent";
+import FormNote from "./FormNote";
+import NotesList from "./NotesList";
+import Note from "./Note";
+@inject("noteStore", "userStore")
+@observer
 class App extends React.Component {
   constructor(props) {
     super(props);
   }
 
-  /*addNote = (noteInfo) =>{
-    console.log(noteInfo);
-    this.setState(prevState=>({
-      notes: prevState.notes.concat(noteInfo)
-    }))
-  };*/
   render() {
-
+    const ustore = this.props.userStore
     return (
-
       <app>
-
-    <FormNote store={this.props.noteStore} />
-    <NotesList />
+        <FormNote store={this.props.noteStore} />
+        <NotesList />
       </app>
     );
   }

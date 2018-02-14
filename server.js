@@ -1,34 +1,35 @@
 "use strict";
-
+//REQUIRE
 var express = require("express");
-var session = require("express-session");
-var MongoStore = require('connect-mongo')(session);
 var mongoose = require("mongoose");
 var bodyParser = require("body-parser");
-
+const morgan = require("morgan");
+const config = require("./config");
+const jwt = require("jsonwebtoken");
 const Note = require("./model/notes");
 const User = require("./model/user");
 const Comment = require("./model/comments");
 var app = express();
 var router = express.Router();
-var port = process.env.API_PORT || 3001;
 var Schema = mongoose.Schema;
-
-//const Note = require('./model/notes');
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-//MONGO DB
+/**
+ *
+ * Config
+ */
+var port = process.env.API_PORT || 3001;
 mongoose.connect("mongodb://tommirok:rokolampi2@ds217138.mlab.com:17138/notes");
 var db = mongoose.connection;
 mongoose.connection.on("error", function(error) {
   console.error("Database connection error:", error);
 });
-
 mongoose.connection.once("open", function() {
   console.log("Database connected");
 });
-
+app.set("t4nk45p", config.secret);
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+//console log requests
+app.use(morgan("dev"));
 //Corssit
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -44,17 +45,7 @@ app.use((req, res, next) => {
   res.setHeader("Cache-Control", "no-cache");
   next();
 });
-//session
-app.use(
-  session({
-    secret: "pena",
-    resave: true,
-    saveUninitialized: false,
-    store: new MongoStore({
-      mongooseConnection: db
-    })
-  })
-);
+//JWT TOKEN
 
 //api polku
 app.use("/api", router);
@@ -66,9 +57,7 @@ app.listen(port, () => {
 
 //Juuri
 router.get("/", (req, res) => {
-  res.json({
-    message: "API inialized"
-  });
+  res.json({ message: "API inialized" });
 });
 
 //GET kaikki notesit
@@ -112,21 +101,32 @@ router
   });
 //USER Alkaaa
 router.route("/user").post((req, res) => {
-  //JOS Register
+  //SITUATION REGISTER
   if (req.body.username && req.body.password && req.body.passwordConf) {
     var userData = {
       username: req.body.username,
       password: req.body.password,
       passwordConf: req.body.passwordConf
-    };
+    };//CREATES USER TO MONGO DB
     User.create(userData, (err, user) => {
       if (err) {
         return res.send(`virhe ${err}`);
-      }
-      req.session.userId = user._id;
-      return res.json({ message: "user added and session is on" });
+      }//GIVES JWT TOKEN TO USER when registered
+      console.log(`User added succesfully : ${req}`);
+      const payload = {
+        sub: user._id,
+        name: user.username,
+        admin: user.admin
+      };
+      var token = jwt.sign(payload, app.get("t4nk45p"));
+      console.log(`Login Succeed!: ${req}`);
+      res.json({
+        success: true,
+        message: "heres your token",
+        token: token
+      });
     });
-    //JOS Login
+    //SITUATION LOGIN
   } else if (req.body.logusername && req.body.logpassword) {
     User.authenticate(
       User,
@@ -138,25 +138,26 @@ router.route("/user").post((req, res) => {
           error.status = 401;
           res.send(`virhe: ${error}`);
         } else {
-          req.session.userId = user._id;
-          return res.json({ message: "session is on" });
+          //GIVES JWT TOKEN TO USER when logs in
+          console.log(`autorisointi alkaa`);
+          const payload = {
+            sub: user._id,
+            name: user.username,
+            admin: user.admin
+          };
+          var token = jwt.sign(payload, app.get("t4nk45p"));
+          console.log(`Login Succeed!: ${req}`);
+          res.json({
+            success: true,
+            message: "heres your token",
+            token: token
+          });
         }
       }
     );
   } else {
     var error = new Error("All fields required.");
     error.status = 400;
-    return next(error);
-  }
-});
-router.route("/logout", (req, res) => {
-  if (req.session) {
-    req.session.destroy(err => {
-      if (err) {
-        res.send(err);
-      } else {
-        res.redirect("/");
-      }
-    });
+    res.send(`${error}`);
   }
 });

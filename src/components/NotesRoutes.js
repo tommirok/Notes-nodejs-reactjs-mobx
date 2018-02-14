@@ -15,8 +15,10 @@ import {
   Switch,
   Redirect
 } from "react-router-dom";
+
 const stores = { noteStore, userStore };
 export default class NotesRoutes extends Component {
+
   render() {
     return (
       <Provider {...stores}>

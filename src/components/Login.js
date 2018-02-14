@@ -8,7 +8,7 @@ export default class Login extends Component{
 
     <app>  <LoginForm />
 <br />
-    <Link className="button" to="/register"><u>Sign Up</u></Link>
+    <Link  to="/register"><u>Register Here</u></Link>
   </app>
 
     )

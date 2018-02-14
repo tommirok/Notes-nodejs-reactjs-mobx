@@ -4,15 +4,13 @@ import { observable, action } from "mobx";
 import Comment from "./Comment";
 import FormComment from "./FormComment";
 let iscomments;
-@inject("noteStore")
+@inject("noteStore", 'userStore')
 @observer
 export default class Note extends Component {
   constructor(props) {
     super(props);
   }
-  componentWillReceiveProps() {
-    "jouuu";
-  }
+
   @observable commentform = false;
   toggleCommentForm = id => {
     this.commentform ? (this.commentform = false) : (this.commentform = true);
@@ -24,7 +22,7 @@ export default class Note extends Component {
     const fetched = store.fetchedc;
     const id = this.props.id;
     const filtered = store.comments.filter(comment => comment.noteId === id);
-    
+
     if (this.commentform) {
       iscomments = (
         <div>

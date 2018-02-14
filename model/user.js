@@ -18,7 +18,11 @@ var UserSchema = new Schema({
   passwordConf: {
     type: String,
     required: true
+  },
+  admin: {
+    type: Boolean
   }
+
 });
 UserSchema.pre("save", function(next) {
   var user = this;

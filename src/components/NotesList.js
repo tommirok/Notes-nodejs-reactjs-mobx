@@ -2,8 +2,9 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
 import Note from "./Note";
-@inject('noteStore')@observer
+@inject('noteStore', 'userStore')@observer
 export default class NotesList extends Component{
+
   componentDidMount(){
     this.props.noteStore.fetchNotes();
       this.props.noteStore.fetchComments();
