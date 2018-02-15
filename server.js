@@ -25,7 +25,7 @@ mongoose.connection.on("error", function(error) {
 mongoose.connection.once("open", function() {
   console.log("Database connected");
 });
-app.set("t4nk45p", config.secret);
+app.set("superSecret", config.secret);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 //console log requests
@@ -55,9 +55,37 @@ app.listen(port, () => {
   console.log(`api running on port ${port}`);
 });
 
+//middleware to Router
+router.use((req, res, next) => {
+  var token =
+    req.body.token || req.query.token || req.headers["x-access-token"];
+
+  if (token) {
+    //if it is token, verifys secret and if its expired or not
+    jwt.verify(token, app.get("superSecret"), (err, decoded) => {
+      if (err) {
+        return { success: false, message: "failed to authenticate token." };
+      } else {
+        req.decoded = decoded;
+        next();
+      }
+    });
+  } else {
+    //no token found
+    return res.status(403).send({
+      success: false,
+      message: "no token provided"
+    });
+  }
+});
 //Juuri
 router.get("/", (req, res) => {
   res.json({ message: "API inialized" });
+});
+router.get('/users', function(req, res) {
+  User.find({}, function(err, users) {
+    res.json(users);
+  });
 });
 
 //GET kaikki notesit
@@ -107,18 +135,18 @@ router.route("/user").post((req, res) => {
       username: req.body.username,
       password: req.body.password,
       passwordConf: req.body.passwordConf
-    };//CREATES USER TO MONGO DB
+    }; //CREATES USER TO MONGO DB
     User.create(userData, (err, user) => {
       if (err) {
         return res.send(`virhe ${err}`);
-      }//GIVES JWT TOKEN TO USER when registered
+      } //GIVES JWT TOKEN TO USER when registered
       console.log(`User added succesfully : ${req}`);
       const payload = {
         sub: user._id,
         name: user.username,
         admin: user.admin
       };
-      var token = jwt.sign(payload, app.get("t4nk45p"));
+      var token = jwt.sign(payload, app.get("superSecret"));
       console.log(`Login Succeed!: ${req}`);
       res.json({
         success: true,
@@ -145,7 +173,7 @@ router.route("/user").post((req, res) => {
             name: user.username,
             admin: user.admin
           };
-          var token = jwt.sign(payload, app.get("t4nk45p"));
+          var token = jwt.sign(payload, app.get("superSecret"));
           console.log(`Login Succeed!: ${req}`);
           res.json({
             success: true,
