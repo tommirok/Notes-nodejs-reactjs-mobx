@@ -54,6 +54,69 @@ app.use("/api", router);
 app.listen(port, () => {
   console.log(`api running on port ${port}`);
 });
+//User Alkaa
+
+router.route("/user").post((req, res) => {
+  //SITUATION REGISTER
+  if (req.body.username && req.body.password && req.body.passwordConf) {
+    var userData = {
+      username: req.body.username,
+      password: req.body.password,
+      passwordConf: req.body.passwordConf
+    }; //CREATES USER TO MONGO DB
+    User.create(userData, (err, user) => {
+      if (err) {
+        return res.send(`virhe ${err}`);
+      } //GIVES JWT TOKEN TO USER when registered
+      console.log(`User added succesfully : ${req}`);
+      const payload = {
+        sub: user._id,
+        name: user.username,
+        admin: user.admin
+      };
+      var token = jwt.sign(payload, app.get("superSecret"));
+      console.log(`Login Succeed!: ${req}`);
+      res.json({
+        success: true,
+        message: "heres your token",
+        token: token
+      });
+    });
+    //SITUATION LOGIN
+  } else if (req.body.logusername && req.body.logpassword) {
+    User.authenticate(
+      User,
+      req.body.logusername,
+      req.body.logpassword,
+      (err, user) => {
+        if (err || !user) {
+          var error = new Error("Wrong email or password");
+          error.status = 401;
+          res.send(`virhe: ${error}`);
+        } else {
+          //GIVES JWT TOKEN TO USER when logs in
+          console.log(`autorisointi alkaa`);
+          const payload = {
+            sub: user._id,
+            name: user.username,
+            admin: user.admin
+          };
+          var token = jwt.sign(payload, app.get("superSecret"));
+          console.log(`Login Succeed!: ${req}`);
+          res.json({
+            success: true,
+            message: "heres your token",
+            token: token
+          });
+        }
+      }
+    );
+  } else {
+    var error = new Error("All fields required.");
+    error.status = 400;
+    res.send(`${error}`);
+  }
+});
 
 //middleware to Router
 router.use((req, res, next) => {
@@ -127,65 +190,3 @@ router
       res.json({ message: "Comment added Succesfully" });
     });
   });
-//USER Alkaaa
-router.route("/user").post((req, res) => {
-  //SITUATION REGISTER
-  if (req.body.username && req.body.password && req.body.passwordConf) {
-    var userData = {
-      username: req.body.username,
-      password: req.body.password,
-      passwordConf: req.body.passwordConf
-    }; //CREATES USER TO MONGO DB
-    User.create(userData, (err, user) => {
-      if (err) {
-        return res.send(`virhe ${err}`);
-      } //GIVES JWT TOKEN TO USER when registered
-      console.log(`User added succesfully : ${req}`);
-      const payload = {
-        sub: user._id,
-        name: user.username,
-        admin: user.admin
-      };
-      var token = jwt.sign(payload, app.get("superSecret"));
-      console.log(`Login Succeed!: ${req}`);
-      res.json({
-        success: true,
-        message: "heres your token",
-        token: token
-      });
-    });
-    //SITUATION LOGIN
-  } else if (req.body.logusername && req.body.logpassword) {
-    User.authenticate(
-      User,
-      req.body.logusername,
-      req.body.logpassword,
-      (err, user) => {
-        if (err || !user) {
-          var error = new Error("Wrong email or password");
-          error.status = 401;
-          res.send(`virhe: ${error}`);
-        } else {
-          //GIVES JWT TOKEN TO USER when logs in
-          console.log(`autorisointi alkaa`);
-          const payload = {
-            sub: user._id,
-            name: user.username,
-            admin: user.admin
-          };
-          var token = jwt.sign(payload, app.get("superSecret"));
-          console.log(`Login Succeed!: ${req}`);
-          res.json({
-            success: true,
-            message: "heres your token",
-            token: token
-          });
-        }
-      }
-    );
-  } else {
-    var error = new Error("All fields required.");
-    error.status = 400;
-    res.send(`${error}`);
-  }
-});

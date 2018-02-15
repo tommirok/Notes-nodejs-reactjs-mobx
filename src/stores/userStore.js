@@ -84,7 +84,7 @@ class UserStore {
           console.log(`ei mee läpi: ${err}`);
         });
 
-  
+
   };
 
 }
